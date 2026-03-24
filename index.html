@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRISENSE - Smart Agriculture Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 25%, #bbf7d0 50%, #86efac 75%, #4ade80 100%);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2);
+        }
+        
+        .card-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .wave {
+            animation: wave 2s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        
+        .pulse-grow {
+            animation: pulseGrow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGrow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        nav {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+
+    <nav class="fixed w-full top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2 slide-in-left">
+                    <svg class="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"/>
+                    </svg>
+                    <span class="text-2xl font-bold text-green-700">AGRISENSE</span>
+                </div>
+                
+                <div class="flex space-x-4 slide-in-right">
+                    <a href="{{ url_for('login') }}" class="px-6 py-2 text-green-700 font-semibold hover:text-green-800 transition">Login</a>
+                    <a href="{{ url_for('signup') }}" class="px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition shadow-md hover:shadow-lg">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="pt-32 pb-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+                        Smart Agriculture <span class="text-gradient">Monitoring System</span>
+                    </h1>
+                    <p class="text-xl text-gray-700 mb-8 leading-relaxed">
+                        Transform your farming with AI-powered crop recommendations, intelligent irrigation management, and instant disease detection. Make data-driven decisions for healthier crops and better yields.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="{{ url_for('signup') }}" class="px-8 py-4 bg-green-600 text-white rounded-lg font-semibold text-lg hover:bg-green-700 transition shadow-lg hover:shadow-xl hover-scale">
+                            Start Free Analysis
+                        </a>
+                        <a href="#features" class="px-8 py-4 bg-white text-green-700 rounded-lg font-semibold text-lg hover:bg-gray-50 transition shadow-lg hover:shadow-xl hover-scale">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative float">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 card-gradient">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="text-center p-6 bg-green-50 rounded-xl hover-scale">
+                                <svg class="w-16 h-16 mx-auto text-green-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"/>
+                                </svg>
+                                <h3 class="font-bold text-gray-800">Crop Analysis</h3>
+                            </div>
+                            
+                            <div class="text-center p-6 bg-blue-50 rounded-xl hover-scale">
+                                <svg class="w-16 h-16 mx-auto text-blue-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.5 2a3.5 3.5 0 101.665 6.58L8.585 10l-1.42 1.42a3.5 3.5 0 101.414 1.414l8.128-8.127a1 1 0 00-1.414-1.414L10 8.586 8.58 7.165A3.5 3.5 0 005.5 2zM4 5.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 9a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <h3 class="font-bold text-gray-800">Irrigation</h3>
+                            </div>
+                            
+                            <div class="text-center p-6 bg-amber-50 rounded-xl hover-scale">
+                                <svg class="w-16 h-16 mx-auto text-amber-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z"/>
+                                </svg>
+                                <h3 class="font-bold text-gray-800">Disease Detection</h3>
+                            </div>
+                            
+                            <div class="text-center p-6 bg-purple-50 rounded-xl hover-scale">
+                                <svg class="w-16 h-16 mx-auto text-purple-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <h3 class="font-bold text-gray-800">AI Reports</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Powerful Features for <span class="text-gradient">Modern Farming</span></h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our AI-powered platform provides comprehensive solutions to optimize your agricultural operations and maximize productivity.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mb-6 pulse-grow">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Smart Crop Recommendations</h3>
+                    <p class="text-gray-600 leading-relaxed">Get AI-powered crop suggestions based on soil composition, climate conditions, and regional patterns to maximize yield potential.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-6 pulse-grow">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.5 2a3.5 3.5 0 101.665 6.58L8.585 10l-1.42 1.42a3.5 3.5 0 101.414 1.414l8.128-8.127a1 1 0 00-1.414-1.414L10 8.586 8.58 7.165A3.5 3.5 0 005.5 2zM4 5.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 9a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Intelligent Irrigation</h3>
+                    <p class="text-gray-600 leading-relaxed">Optimize water usage with precision irrigation recommendations based on real-time soil moisture, temperature, and crop requirements.</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-amber-50 to-white p-8 rounded-2xl shadow-lg hover-scale">
+                    <div class="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mb-6 pulse-grow">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Disease Detection</h3>
+                    <p class="text-gray-600 leading-relaxed">Identify plant diseases instantly using advanced computer vision. Upload leaf images for accurate diagnosis and treatment plans.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 gradient-bg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="slide-in-left">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">How It Works</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">1</div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 mb-2">Create Your Account</h4>
+                                <p class="text-gray-600">Sign up in seconds and access the complete agricultural analysis platform.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">2</div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 mb-2">Input Farm Data</h4>
+                                <p class="text-gray-600">Enter soil parameters, environmental conditions, and upload crop images.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">3</div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 mb-2">Get Instant Analysis</h4>
+                                <p class="text-gray-600">Receive comprehensive crop recommendations, irrigation guidance, and disease detection results.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xl">4</div>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-800 mb-2">Take Action</h4>
+                                <p class="text-gray-600">Download detailed reports and implement AI-powered recommendations for optimal results.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-in-right">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 card-gradient">
+                        <div class="space-y-6">
+                            <div class="border-l-4 border-green-600 pl-4">
+                                <p class="text-3xl font-bold text-green-600">99.5%</p>
+                                <p class="text-gray-600">Crop Prediction Accuracy</p>
+                            </div>
+                            <div class="border-l-4 border-blue-600 pl-4">
+                                <p class="text-3xl font-bold text-blue-600">98%</p>
+                                <p class="text-gray-600">Irrigation Accuracy</p>
+                            </div>
+                            <div class="border-l-4 border-amber-600 pl-4">
+                                <p class="text-3xl font-bold text-amber-600">90.5%</p>
+                                <p class="text-gray-600">Disease Detection Accuracy</p>
+                            </div>
+                            <div class="border-l-4 border-purple-600 pl-4">
+                                <p class="text-3xl font-bold text-purple-600">15+</p>
+                                <p class="text-gray-600">Disease Categories</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">About <span class="text-gradient">AGRISENSE</span></h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                    AGRISENSE is an advanced AI-powered agricultural monitoring system designed to help farmers make data-driven decisions. 
+                    Our platform combines machine learning models trained on extensive agricultural datasets to provide accurate crop recommendations, 
+                    intelligent irrigation management, and instant disease detection. We empower farmers with technology to increase productivity, 
+                    reduce resource wastage, and promote sustainable farming practices.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 wave">
+                        <svg class="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Expert Team</h3>
+                    <p class="text-gray-600">Agricultural experts and AI specialists working together for farming innovation.</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 wave">
+                        <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Proven Accuracy</h3>
+                    <p class="text-gray-600">Validated models with high accuracy rates for reliable agricultural insights.</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 wave">
+                        <svg class="w-10 h-10 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Data-Driven</h3>
+                    <p class="text-gray-600">Decisions backed by comprehensive agricultural datasets and real-time analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6 fade-in">Ready to Transform Your Farming?</h2>
+            <p class="text-xl text-gray-700 mb-8 fade-in">Join thousands of farmers using AGRISENSE to make smarter agricultural decisions.</p>
+            <a href="{{ url_for('signup') }}" class="inline-block px-10 py-4 bg-green-600 text-white rounded-lg font-semibold text-xl hover:bg-green-700 transition shadow-xl hover:shadow-2xl hover-scale">
+                Get Started Free
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-white py-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-600">&copy; 2025 AGRISENSE. All rights reserved. Empowering farmers with intelligent agriculture solutions.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

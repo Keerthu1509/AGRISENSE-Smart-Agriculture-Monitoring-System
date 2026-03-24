@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - AGRISENSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+        
+        .result-card {
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stat-box {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2);
+        }
+        
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(34, 197, 94, 0.3);
+        }
+        
+        .recommendation-box {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
+        }
+        
+        .success-icon {
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        .recommendation-list {
+            list-style-type: upper-alpha;
+            padding-left: 1.5rem;
+        }
+        
+        .recommendation-list li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"/>
+                    </svg>
+                    <span class="text-2xl font-bold text-green-700">AGRISENSE</span>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <span class="text-gray-700 font-medium">{{ user_name }}</span>
+                    <a href="{{ url_for('logout') }}" class="px-6 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <div class="text-center mb-10">
+            <div class="success-icon inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
+                <svg class="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-3">Farm Health Analysis Complete</h1>
+            <p class="text-lg text-gray-600">Analysis completed on {{ result.timestamp }}</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="stat-box bg-gradient-to-br from-green-50 to-white rounded-2xl shadow-xl p-6 border-t-4 border-green-500">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"/>
+                        </svg>
+                    </div>
+                    <span class="pulse-dot inline-block w-3 h-3 bg-green-500 rounded-full"></span>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">Recommended Crop</h3>
+                <p class="text-3xl font-bold text-green-600 mb-2">{{ result.recommended_crop|upper }}</p>
+                <div class="flex items-center space-x-2">
+                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full" style="width: {{ result.crop_confidence }}%"></div>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-600">{{ result.crop_confidence }}%</span>
+                </div>
+            </div>
+
+            <div class="stat-box bg-gradient-to-br from-blue-50 to-white rounded-2xl shadow-xl p-6 border-t-4 border-blue-500">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.5 2a3.5 3.5 0 101.665 6.58L8.585 10l-1.42 1.42a3.5 3.5 0 101.414 1.414l8.128-8.127a1 1 0 00-1.414-1.414L10 8.586 8.58 7.165A3.5 3.5 0 005.5 2zM4 5.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm0 9a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="pulse-dot inline-block w-3 h-3 bg-blue-500 rounded-full"></span>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">Irrigation Status</h3>
+                <p class="text-3xl font-bold text-blue-600 mb-2">{{ result.irrigation_status }}</p>
+                <div class="flex items-center space-x-2">
+                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ result.irrigation_confidence }}%"></div>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-600">{{ result.irrigation_confidence }}%</span>
+                </div>
+            </div>
+
+            <div class="stat-box bg-gradient-to-br from-amber-50 to-white rounded-2xl shadow-xl p-6 border-t-4 border-amber-500">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z"/>
+                        </svg>
+                    </div>
+                    <span class="pulse-dot inline-block w-3 h-3 bg-amber-500 rounded-full"></span>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">Disease Detected</h3>
+                <p class="text-xl font-bold text-amber-600 mb-2">{{ result.disease_name|replace('_', ' ')|title }}</p>
+                <div class="flex items-center space-x-2">
+                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                        <div class="bg-amber-600 h-2 rounded-full" style="width: {{ result.disease_confidence }}%"></div>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-600">{{ result.disease_confidence }}%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="result-card bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <svg class="w-8 h-8 text-purple-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"/>
+                        <path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                    Uploaded Leaf Image
+                </h2>
+                <img src="/{{ result.image_path }}" 
+                     alt="Leaf Image" 
+                     class="w-full rounded-xl shadow-lg border-4 border-green-200">
+            </div>
+
+            <div class="recommendation-box bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <svg class="w-8 h-8 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                    AI-Powered Recommendations
+                </h2>
+                <div class="text-gray-700 leading-relaxed space-y-4" id="recommendations">
+                    {{ result.gemini_recommendation|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="{{ url_for('download_pdf') }}" 
+               class="download-btn px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-xl font-bold text-lg shadow-xl hover:from-purple-700 hover:to-purple-600 inline-flex items-center space-x-2">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                <span>Download PDF Report</span>
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" 
+               class="download-btn px-8 py-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl font-bold text-lg shadow-xl hover:from-green-700 hover:to-green-600 inline-flex items-center space-x-2">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                </svg>
+                <span>New Analysis</span>
+            </a>
+
+            <a href="{{ url_for('history') }}" 
+               class="download-btn px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl font-bold text-lg shadow-xl hover:from-blue-700 hover:to-blue-600 inline-flex items-center space-x-2">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                </svg>
+                <span>View History</span>
+            </a>
+
+            <form action="{{ url_for('send_sms_route') }}" method="POST" class="inline-block">
+                <button type="submit" 
+                   class="download-btn px-8 py-4 bg-gradient-to-r from-yellow-500 to-amber-500 text-white rounded-xl font-bold text-lg shadow-xl hover:from-yellow-600 hover:to-amber-600 inline-flex items-center space-x-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                    </svg>
+                    <span>Send SMS Alert</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-white py-6 mt-12 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-600">&copy; 2025 AGRISENSE. Empowering farmers with intelligent agriculture solutions.</p>
+        </div>
+    </footer>
+
+    <script>
+        function formatRecommendations() {
+            const recDiv = document.getElementById('recommendations');
+            let text = recDiv.textContent;
+            
+            const sections = text.split(/(?=Disease Analysis:|Treatment Options:|Chemical Treatment:|Organic Treatment:|Preventive Measures:|Additional Recommendations:)/);
+            
+            let formattedHTML = '';
+            
+            sections.forEach(section => {
+                if (section.trim()) {
+                    const lines = section.trim().split('\n').filter(line => line.trim());
+                    
+                    if (lines[0].includes(':')) {
+                        formattedHTML += `<h3 class="text-lg font-bold text-gray-800 mt-4 mb-2">${lines[0]}</h3>`;
+                        
+                        if (lines.length > 1) {
+                            if (lines[0].includes('Chemical Treatment:') || lines[0].includes('Organic Treatment:') || lines[0].includes('Preventive Measures:') || lines[0].includes('Additional Recommendations:')) {
+                                formattedHTML += '<ol class="recommendation-list">';
+                                for (let i = 1; i < lines.length; i++) {
+                                    if (lines[i].trim()) {
+                                        formattedHTML += `<li>${lines[i].trim()}</li>`;
+                                    }
+                                }
+                                formattedHTML += '</ol>';
+                            } else {
+                                for (let i = 1; i < lines.length; i++) {
+                                    if (lines[i].trim()) {
+                                        formattedHTML += `<p class="mb-2">${lines[i].trim()}</p>`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            recDiv.innerHTML = formattedHTML;
+        }
+        
+        document.addEventListener('DOMContentLoaded', formatRecommendations);
+    </script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics - AGRISENSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+      * {
+        font-family: "Inter", sans-serif;
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      }
+      .section-card {
+        transition: all 0.3s ease;
+      }
+      .section-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(34, 197, 94, 0.15);
+      }
+      .fade-in {
+        animation: fadeIn 0.6s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="gradient-bg min-h-screen">
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-2">
+            <svg
+              class="w-10 h-10 text-green-600"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z"
+              />
+            </svg>
+            <span class="text-2xl font-bold text-green-700">AGRISENSE</span>
+          </div>
+
+          <div class="flex items-center space-x-6">
+            <span class="text-gray-700 font-medium">{{ user_name }}</span>
+            <a
+              href="{{ url_for('dashboard') }}"
+              class="text-green-600 hover:text-green-700 font-semibold transition"
+              >Dashboard</a
+            >
+            <a
+              href="{{ url_for('history') }}"
+              class="text-green-600 hover:text-green-700 font-semibold transition"
+              >History</a
+            >
+            <a
+              href="{{ url_for('logout') }}"
+              class="px-6 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center mb-10 fade-in">
+        <h1 class="text-4xl font-bold text-gray-800 mb-3">
+          Data Analytics & Trends
+        </h1>
+        <p class="text-lg text-gray-600">
+          Track your farm health metrics over time with moving averages and
+          statistical summaries
+        </p>
+      </div>
+
+      {% if stats %}
+      <!-- Statistical Summary -->
+      <div class="grid md:grid-cols-3 gap-6 mb-10 fade-in">
+        <!-- Temp Stats -->
+        <div
+          class="section-card bg-white rounded-2xl shadow-xl p-6 border-l-4 border-orange-500"
+        >
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <span
+              class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-2"
+              >🌡️</span
+            >
+            Temperature (°C)
+          </h3>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Min</p>
+              <p class="text-lg font-bold text-gray-800">
+                {{ stats.temp.min }}
+              </p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Max</p>
+              <p class="text-lg font-bold text-gray-800">
+                {{ stats.temp.max }}
+              </p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Mean</p>
+              <p class="text-lg font-bold text-green-600">
+                {{ stats.temp.mean }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Humidity Stats -->
+        <div
+          class="section-card bg-white rounded-2xl shadow-xl p-6 border-l-4 border-blue-500"
+        >
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <span
+              class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2"
+              >💧</span
+            >
+            Humidity (%)
+          </h3>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Min</p>
+              <p class="text-lg font-bold text-gray-800">{{ stats.hum.min }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Max</p>
+              <p class="text-lg font-bold text-gray-800">{{ stats.hum.max }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Mean</p>
+              <p class="text-lg font-bold text-green-600">
+                {{ stats.hum.mean }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Soil Moisture Stats -->
+        <div
+          class="section-card bg-white rounded-2xl shadow-xl p-6 border-l-4 border-brown-500"
+        >
+          <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+            <span
+              class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-2"
+              >🌱</span
+            >
+            Soil Moisture
+          </h3>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Min</p>
+              <p class="text-lg font-bold text-gray-800">
+                {{ stats.soil.min }}
+              </p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Max</p>
+              <p class="text-lg font-bold text-gray-800">
+                {{ stats.soil.max }}
+              </p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase">Mean</p>
+              <p class="text-lg font-bold text-green-600">
+                {{ stats.soil.mean }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid md:grid-cols-1 gap-8 fade-in">
+        <!-- Temperature Chart -->
+        <div class="section-card bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            Temperature Trends
+          </h2>
+          <div class="h-[400px]">
+            <canvas id="tempChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Humidity Chart -->
+        <div class="section-card bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Humidity Trends</h2>
+          <div class="h-[400px]">
+            <canvas id="humChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Soil Moisture Chart -->
+        <div class="section-card bg-white rounded-2xl shadow-xl p-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">
+            Soil Moisture Trends
+          </h2>
+          <div class="h-[400px]">
+            <canvas id="soilChart"></canvas>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="text-center py-20 bg-white rounded-2xl shadow-xl fade-in">
+        <svg
+          class="w-24 h-24 mx-auto text-gray-300 mb-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+          />
+        </svg>
+        <h2 class="text-2xl font-bold text-gray-600 mb-3">No Data Available</h2>
+        <p class="text-gray-500 mb-6">
+          You need to perform at least 3-7 analyses to see trend lines and
+          moving averages.
+        </p>
+        <a
+          href="{{ url_for('dashboard') }}"
+          class="inline-block px-8 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition shadow-lg"
+        >
+          Back to Dashboard
+        </a>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if chart_data %}
+    <script>
+      const chartLabels = {{ chart_data.labels|tojson }};
+
+      function createChart(ctxId, label, actualData, ma3Data, ma7Data, color) {
+          const ctx = document.getElementById(ctxId).getContext('2d');
+          new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: chartLabels,
+                  datasets: [
+                      {
+                          label: `Actual ${label}`,
+                          data: actualData,
+                          borderColor: color,
+                          backgroundColor: color + '20',
+                          borderWidth: 2,
+                          pointRadius: 4,
+                          fill: true,
+                          tension: 0.1
+                      },
+                      {
+                          label: '3-Entry Moving Avg',
+                          data: ma3Data,
+                          borderColor: '#22c55e',
+                          borderDash: [5, 5],
+                          borderWidth: 2,
+                          pointRadius: 0,
+                          fill: false,
+                          tension: 0.4
+                      },
+                      {
+                          label: '7-Entry Moving Avg',
+                          data: ma7Data,
+                          borderColor: '#ef4444',
+                          borderDash: [2, 2],
+                          borderWidth: 2,
+                          pointRadius: 0,
+                          fill: false,
+                          tension: 0.4
+                      }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                      legend: { position: 'top' },
+                      tooltip: { mode: 'index', intersect: false }
+                  },
+                  scales: {
+                      y: { beginAtZero: false, grid: { color: '#f3f4f6' } },
+                      x: { grid: { display: false } }
+                  }
+              }
+          });
+      }
+
+      // Initialize Charts
+      window.addEventListener('load', () => {
+          createChart('tempChart', 'Temp', {{ chart_data.temp.actual|tojson }}, {{ chart_data.temp.ma3|tojson }}, {{ chart_data.temp.ma7|tojson }}, '#f97316');
+          createChart('humChart', 'Humidity', {{ chart_data.hum.actual|tojson }}, {{ chart_data.hum.ma3|tojson }}, {{ chart_data.hum.ma7|tojson }}, '#3b82f6');
+          createChart('soilChart', 'Soil Moisture', {{ chart_data.soil.actual|tojson }}, {{ chart_data.soil.ma3|tojson }}, {{ chart_data.soil.ma7|tojson }}, '#8b4513');
+      });
+    </script>
+    {% endif %}
+
+    <footer class="bg-white py-6 mt-12 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-gray-600">
+          &copy; 2025 AGRISENSE. Empowering farmers with intelligent agriculture
+          solutions.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
